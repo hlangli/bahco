@@ -3,15 +3,16 @@ package dk.langli.bahco;
 import static dk.langli.bahco.Bahco.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
-import dk.langli.bahco.Bahco;
 import dk.langli.bahco.function.ThrowableRunnable;
 import dk.langli.bahco.function.WrappedException;
 
@@ -133,5 +134,44 @@ public class BahcoTest {
 		assertEquals(5, m.size());
 		assertEquals(0, m.get(null));
 		assertEquals(5, m.get("four"));
+	}
+
+	@Test
+	void testFlatten() {
+		//Given
+		List<Integer> list = list(1, 2, 3);
+		Map<String, Object> map = map(
+				entry("energy", map(
+						entry("barry", map(
+								entry("BarryUtilTest", map(
+										entry("a", list)
+								))
+						))
+				)),
+				entry(null, 4)
+		);
+		
+		//When
+		Map<String, Object> flattenedMap = flatten(map);
+		Map<String, Object> flattenedList = flatten(list);
+		
+		//Then
+		assertEquals(1, (int) flattenedList.get("[0]"));
+		assertEquals(2, (int) flattenedList.get("[1]"));
+		assertEquals(3, (int) flattenedList.get("[2]"));
+		assertEquals(1, (int) flattenedMap.get("energy.barry.BarryUtilTest.a[0]"));
+		assertEquals(2, (int) flattenedMap.get("energy.barry.BarryUtilTest.a[1]"));
+		assertEquals(3, (int) flattenedMap.get("energy.barry.BarryUtilTest.a[2]"));
+		assertEquals(4, (int) flattenedMap.get("null"));
+	}
+
+	@Test
+	void testBd() {
+		assertEquals(1.5, bd(1.5).doubleValue());
+		assertEquals(1.5, bd("1.5").doubleValue());
+		assertEquals(1.5, normalize(bd("1.50")).doubleValue());
+		assertEquals(null, normalize(null));
+		assertEquals("1E-20", bd("1E-20").toString());
+		assertEquals("1E-20", normalize(bd("1E-20")).toString());
 	}
 }

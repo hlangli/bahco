@@ -1,5 +1,6 @@
 package dk.langli.bahco;
 
+import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -203,5 +205,64 @@ public class Bahco {
 			}
 			return result;
 		});
+	}
+
+	public static Map<String, Object> flatten(Map<String, Object> h) {
+		return flatten(null, h);
+	}
+
+	public static Map<String, Object> flatten(List<?> h) {
+		return flatten(null, h);
+	}
+
+	private static Map<String, Object> flatten(String key, Object o) {
+		Map<String, Object> map = new LinkedHashMap<>();
+		if (o instanceof Map) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> m = (Map<String, Object>) o;
+			for (String k : m.keySet()) {
+				String fqk = key != null ? subst("%s.%s", key, k) : k;
+				map.putAll(flatten(fqk, m.get(k)));
+			}
+		} else if (o instanceof Collection) {
+			@SuppressWarnings("unchecked")
+			List<Object> c = (List<Object>) o;
+			for (int i = 0; i < c.size(); i++) {
+				String fqk = key != null ? subst("%s[%s]", key, i) : subst("[%s]", i);
+				map.putAll(flatten(fqk, c.get(i)));
+			}
+		} else {
+			map.put(key != null ? key : "null", o);
+		}
+		return map;
+	}
+
+	// -- NUMBERS -------------------------------------------------------------
+
+  public static BigDecimal bd(String doubleValue) {
+		return normalize(new BigDecimal(doubleValue));
+	}
+
+	public static BigDecimal bd(Double doubleValue) {
+		return bd(doubleValue.toString());
+	}
+
+	/**
+	 * Normalizes BigDecimal to have equals working more easily
+	 * (Strips useless trailing 0 but force the scale to be at least 0 to avoid scientific display such as "1E+2")
+	 *
+	 * @param bigDecimal
+	 * @return
+	 */
+	public static BigDecimal normalize(BigDecimal bigDecimal) {
+		if(bigDecimal == null) {
+			return null;
+		}
+		// remove useless 0
+		BigDecimal normalizedBigDecimal = bigDecimal.stripTrailingZeros();
+		// but force the scale to be at least 0 to avoid scientific display such as
+		// "1E+2"
+		normalizedBigDecimal = normalizedBigDecimal.scale() < 0 ? normalizedBigDecimal.setScale(0) : normalizedBigDecimal;
+		return normalizedBigDecimal;
 	}
 }
