@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -251,15 +252,13 @@ public class Bahco {
 	 * Normalizes BigDecimal to have equals working more easily
 	 * (Strips useless trailing 0 but force the scale to be at least 0 to avoid scientific display such as "1E+2")
 	 *
-	 * @param bigDecimal
+	 * @param n
 	 * @return
 	 */
-	public static BigDecimal normalize(BigDecimal bigDecimal) {
-		if(bigDecimal == null) {
-			return null;
-		}
+	public static BigDecimal normalize(BigDecimal n) {
+		Objects.requireNonNull(n);
 		// remove useless 0
-		BigDecimal normalizedBigDecimal = bigDecimal.stripTrailingZeros();
+		BigDecimal normalizedBigDecimal = n.stripTrailingZeros();
 		// but force the scale to be at least 0 to avoid scientific display such as
 		// "1E+2"
 		normalizedBigDecimal = normalizedBigDecimal.scale() < 0 ? normalizedBigDecimal.setScale(0) : normalizedBigDecimal;

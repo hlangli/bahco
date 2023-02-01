@@ -47,11 +47,15 @@ public class Json {
 	}
 	
 	public static <T> T parse(String json, Class<T> type) {
-		return parse(new ByteArrayInputStream(json.getBytes()), type);
+		return parse(stream(json), type);
 	}
 
 	public static <T> T parse(InputStream json, Class<T> type) {
 		return wrap(() -> mapper().readValue(json, type));
+	}
+
+	public static <T extends Map<K, V>, K, V> T parse(String json, Class<T> mapType, Class<K> keyType, Class<V> valueType) {
+		return parse(stream(json), mapType, keyType, valueType);
 	}
 
 	public static <T extends Map<K, V>, K, V> T parse(InputStream json, Class<T> mapType, Class<K> keyType, Class<V> valueType) {
@@ -59,8 +63,16 @@ public class Json {
 		return wrap(() -> mapper().readValue(json, t));
 	}
 
+	public static <T extends Collection<E>, E> T parse(String json, Class<T> collectionType, Class<E> elementType) {
+		return parse(stream(json), collectionType, elementType);
+	}
+
 	public static <T extends Collection<E>, E> T parse(InputStream json, Class<T> collectionType, Class<E> elementType) {
 		JavaType t = TypeFactory.defaultInstance().constructCollectionLikeType(collectionType, elementType);
 		return wrap(() -> mapper().readValue(json, t));
+	}
+	
+	private static InputStream stream(String s) {
+		return new ByteArrayInputStream(s.getBytes());
 	}
 }

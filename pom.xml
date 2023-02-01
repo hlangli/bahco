@@ -13,20 +13,22 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
-		<org.slf4j.slf4j-api.version>2.0.6</org.slf4j.slf4j-api.version>
+		<org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>0.65</org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>
+		<!-- DEPENDENCIES -->
 		<ch.qos.logback.logback.version>1.4.5</ch.qos.logback.logback.version>
-		<junit.junit.version>4.12</junit.junit.version>
 		<com.fasterxml.jackson.version>2.14.1</com.fasterxml.jackson.version>
-		<commons-io.commons-io.version>2.11.0</commons-io.commons-io.version>
-		<org.apache.httpcomponents.httpclient.version>4.5.14</org.apache.httpcomponents.httpclient.version>
 		<com.github.freva.ascii-table.version>1.8.0</com.github.freva.ascii-table.version>
-		<org.junit.junit-bom.version>5.9.2</org.junit.junit-bom.version>
-		<javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
-		<org.hibernate.validator.hibernate-validator>6.1.5.Final</org.hibernate.validator.hibernate-validator>
+		<commons-io.commons-io.version>2.11.0</commons-io.commons-io.version>
 		<javax.el.javax.el-api.version>3.0.0</javax.el.javax.el-api.version>
-		<org.glassfish.web.javax.el.version>2.2.6</org.glassfish.web.javax.el.version>
+		<javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
+		<org.apache.commons.commons-lang3.version>3.12.0</org.apache.commons.commons-lang3.version>
+		<org.apache.httpcomponents.httpclient.version>4.5.14</org.apache.httpcomponents.httpclient.version>
 		<org.assertj.assertj-core.version>3.24.2</org.assertj.assertj-core.version>
-		<org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>0.6</org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>
+		<org.glassfish.web.javax.el.version>2.2.6</org.glassfish.web.javax.el.version>
+		<org.hibernate.validator.hibernate-validator>6.1.5.Final</org.hibernate.validator.hibernate-validator>
+		<org.junit.junit-bom.version>5.9.2</org.junit.junit-bom.version>
+		<org.slf4j.slf4j-api.version>2.0.6</org.slf4j.slf4j-api.version>
+		<org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -50,7 +52,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.24</version>
+			<version>${org.projectlombok.lombok.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -75,6 +77,11 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${org.apache.commons.commons-lang3.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.commons-io.version}</version>
@@ -82,19 +89,16 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
-        <version>${org.junit.junit-bom.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>${org.junit.junit-bom.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
-        <version>${org.junit.junit-bom.version}</version>
         <scope>test</scope>
       </dependency>
 		<dependency>

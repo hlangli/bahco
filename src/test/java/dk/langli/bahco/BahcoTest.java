@@ -3,14 +3,15 @@ package dk.langli.bahco;
 import static dk.langli.bahco.Bahco.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.RoundingMode;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 
 import dk.langli.bahco.function.ThrowableRunnable;
@@ -87,6 +88,17 @@ public class BahcoTest {
 		assertEquals(0, swallowSilent(() -> {
 			throw new Exception(SWEDISH_KEY);
 		}, 0));
+		assertDoesNotThrow(() ->swallow(() -> {
+			throw new NoTraceException();
+		}));
+	}
+	
+	@SuppressWarnings("serial")
+	private static class NoTraceException extends Exception {
+		@Override
+		public StackTraceElement[] getStackTrace() {
+			return new StackTraceElement[0];
+		}
 	}
 
 	@Test
@@ -117,9 +129,9 @@ public class BahcoTest {
 		assertEquals(list("1", "2", "5"), sortedSet("1", "5", "2").stream().collect(Collectors.toList()));
 		assertEquals(list("5", "2", "1"), sortedSet((a, b) -> b.compareTo(a), "1", "5", "2").stream().collect(Collectors.toList()));
 	}
-	
+
 	@Test
-	public void testToNvlMap() {
+	public void testMap() {
 		Map<String, Integer> m = map(
 				null,
 				entry("one", 1),
@@ -128,16 +140,35 @@ public class BahcoTest {
 				entry("four", 4),
 				entry("four", 5),
 				entry(null, null),
+				entry("five", null),
 				entry(null, 0)
-		).entrySet().stream()
-				.collect(toNvlMap(Entry::getKey, Entry::getValue));
-		assertEquals(5, m.size());
+		);
+		assertEquals(6, m.size());
 		assertEquals(0, m.get(null));
 		assertEquals(5, m.get("four"));
 	}
-
+	
 	@Test
-	void testFlatten() {
+	public void testToNvlMap() {
+		BiFunction<String, Integer, Pair<String, Integer>> pair = Pair::of;
+		Map<String, Integer> m = list(
+				pair.apply("one", 1),
+				pair.apply("two", 2),
+				pair.apply("three", 3),
+				pair.apply("four", 4),
+				pair.apply("four", 5),
+				pair.apply(null, null),
+				pair.apply("five", null),
+				pair.apply(null, 0)
+		).stream()
+				.collect(toNvlMap(Pair::getKey, Pair::getValue));
+		assertEquals(6, m.size());
+		assertEquals(0, m.get(null));
+		assertEquals(5, m.get("four"));
+	}
+	
+	@Test
+	public void testFlatten() {
 		//Given
 		List<Integer> list = list(1, 2, 3);
 		Map<String, Object> map = map(
@@ -166,12 +197,13 @@ public class BahcoTest {
 	}
 
 	@Test
-	void testBd() {
+	public void testBd() {
 		assertEquals(1.5, bd(1.5).doubleValue());
 		assertEquals(1.5, bd("1.5").doubleValue());
 		assertEquals(1.5, normalize(bd("1.50")).doubleValue());
-		assertEquals(null, normalize(null));
+		assertThrows(NullPointerException.class, () -> normalize(null));
 		assertEquals("1E-20", bd("1E-20").toString());
 		assertEquals("1E-20", normalize(bd("1E-20")).toString());
+		assertEquals("60000", normalize(BigDecimal.valueOf(600, -2)).toString());
 	}
 }
