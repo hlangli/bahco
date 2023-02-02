@@ -2,6 +2,8 @@ BAHCO
 =====
 Utility methods general computing purposes.  The API covers utility methods for expressing code efficiently through the use of a more compact syntax while still adhering to the constraints of the Java language structs so that it abstracts rather than redefines.
 
+The name of the project is an hommage to the Bahco Company which is credited for inventing the adjustable wrench, a tool that can be used to fix many problems.
+
 ## Overview of classes
 Below is an introduction to the main utility classes and which area they cover
 
