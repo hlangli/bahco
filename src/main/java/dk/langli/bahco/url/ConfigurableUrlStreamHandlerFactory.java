@@ -14,7 +14,7 @@ public class ConfigurableUrlStreamHandlerFactory implements URLStreamHandlerFact
 
 	public static void register() {
 		URL.setURLStreamHandlerFactory(instance);
-		instance.addHandler("classpath", new ClasspathUrlStreamHandler());
+		new ClasspathUrlStreamHandler().register();
 	}
 
 	public static ConfigurableUrlStreamHandlerFactory getInstance() {
