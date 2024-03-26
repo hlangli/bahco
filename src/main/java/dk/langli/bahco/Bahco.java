@@ -191,6 +191,14 @@ public class Bahco {
 				.collect(toNvlMap(Entry::getKey, Entry::getValue, (a, b) -> b));
 	}
 
+	public static <T> T nvl(T obj, Supplier<T> nvl) {
+		return obj != null ? obj : nvl.get();
+	}
+
+	public static <T> T nvl(T obj, T nvl) {
+		return obj != null ? obj : nvl;
+	}
+
 	public static <T, K, U> Collector<T, ?, Map<K, U>> toNvlMap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends U> valueMapper) {
 		return toNvlMap(keyMapper, valueMapper, (a, b) -> b);
 	}
