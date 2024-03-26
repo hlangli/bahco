@@ -158,9 +158,13 @@ public class Bahco {
 		return String.format(format, args);
 	}
 
+
+	public static String s(String format, Map<String, Object> variables) {
+		return subst(format, variables);
+	}
+
 	public static String subst(String format, Map<String, Object> variables) {
-		StringSubstitutor subst = new StringSubstitutor(variables);
-		return subst.replace(format);
+		return StringSubstitutor.replace(format, variables);
 	}
 
 	public static String getResourceAsString(String classpath) {
