@@ -23,6 +23,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -157,6 +158,15 @@ public class Bahco {
 		return String.format(format, args);
 	}
 
+
+	public static String s(String format, Map<String, Object> variables) {
+		return subst(format, variables);
+	}
+
+	public static String subst(String format, Map<String, Object> variables) {
+		return StringSubstitutor.replace(format, variables);
+	}
+
 	public static String getResourceAsString(String classpath) {
 		try {
 			return IOUtils.toString(Bahco.class.getClassLoader().getResourceAsStream(classpath), PLATFORM_ENCODING);
@@ -250,6 +260,10 @@ public class Bahco {
 
   public static BigDecimal bd(String doubleValue) {
 		return normalize(new BigDecimal(doubleValue));
+	}
+
+	public static BigDecimal bd(Integer intValue) {
+		return bd(intValue.toString());
 	}
 
 	public static BigDecimal bd(Double doubleValue) {

@@ -15,20 +15,23 @@
 		<maven.compiler.source>17</maven.compiler.source>
 		<org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>0.65</org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>
 		<!-- DEPENDENCIES -->
-		<ch.qos.logback.logback.version>1.4.5</ch.qos.logback.logback.version>
-		<com.fasterxml.jackson.version>2.14.1</com.fasterxml.jackson.version>
+		<ch.qos.logback.logback.version>1.5.3</ch.qos.logback.logback.version>
+		<com.fasterxml.jackson.version>2.17.0</com.fasterxml.jackson.version>
 		<com.github.freva.ascii-table.version>1.8.0</com.github.freva.ascii-table.version>
-		<commons-io.commons-io.version>2.11.0</commons-io.commons-io.version>
-		<javax.el.javax.el-api.version>3.0.0</javax.el.javax.el-api.version>
+		<commons-io.commons-io.version>2.15.1</commons-io.commons-io.version>
+		<javax.el.javax.el-api.version>3.0.1-b06</javax.el.javax.el-api.version>
 		<javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
-		<org.apache.commons.commons-lang3.version>3.12.0</org.apache.commons.commons-lang3.version>
+		<org.apache.commons.commons-lang3.version>3.14.0</org.apache.commons.commons-lang3.version>
 		<org.apache.httpcomponents.httpclient.version>4.5.14</org.apache.httpcomponents.httpclient.version>
-		<org.assertj.assertj-core.version>3.24.2</org.assertj.assertj-core.version>
+		<org.assertj.assertj-core.version>3.25.3</org.assertj.assertj-core.version>
 		<org.glassfish.web.javax.el.version>2.2.6</org.glassfish.web.javax.el.version>
 		<org.hibernate.validator.hibernate-validator>6.1.5.Final</org.hibernate.validator.hibernate-validator>
-		<org.junit.junit-bom.version>5.9.2</org.junit.junit-bom.version>
-		<org.slf4j.slf4j-api.version>2.0.6</org.slf4j.slf4j-api.version>
-		<org.projectlombok.lombok.version>1.18.24</org.projectlombok.lombok.version>
+		<org.junit.junit-bom.version>5.10.2</org.junit.junit-bom.version>
+		<org.slf4j.slf4j-api.version>2.1.0-alpha1</org.slf4j.slf4j-api.version>
+		<org.projectlombok.lombok.version>1.18.32</org.projectlombok.lombok.version>
+		<org.apache.commons.commons-text.version>1.11.0</org.apache.commons.commons-text.version>
+		<jakarta.json.bind.jakarta.json.bind-api.version>3.0.0</jakarta.json.bind.jakarta.json.bind-api.version>
+		<org.eclipse.yasson.version>3.0.3</org.eclipse.yasson.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -53,6 +56,16 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<version>${org.projectlombok.lombok.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.json.bind</groupId>
+			<artifactId>jakarta.json.bind-api</artifactId>
+			<version>${jakarta.json.bind.jakarta.json.bind-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>yasson</artifactId>
+			<version>${org.eclipse.yasson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -85,6 +98,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.commons-io.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>${org.apache.commons.commons-text.version}</version>
 		</dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -162,7 +180,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.8</version>
+				<version>0.8.11</version>
 				<configuration>
 					<rules>
 						<rule>

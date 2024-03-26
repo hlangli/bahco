@@ -206,4 +206,9 @@ public class BahcoTest {
 		assertEquals("1E-20", normalize(bd("1E-20")).toString());
 		assertEquals("60000", normalize(BigDecimal.valueOf(600, -2)).toString());
 	}
+	
+	@Test
+	public void testSubst() {
+		assertEquals(s("abc${var}ghi", entry("var", "def")), "abcdefghi");
+	}
 }

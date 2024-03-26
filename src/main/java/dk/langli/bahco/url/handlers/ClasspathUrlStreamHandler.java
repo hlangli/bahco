@@ -1,5 +1,7 @@
 package dk.langli.bahco.url.handlers;
 
+import static dk.langli.bahco.Bahco.*;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -15,20 +17,14 @@ public class ClasspathUrlStreamHandler extends ConfigurableUrlStreamHandler {
 
 	@Override
 	protected URLConnection openConnection(URL u) throws IOException {
-		String path = u.getPath();
+		String path = u.toString().substring((u.getProtocol()+":").length());
 		URL resourceUrl = null;
 		if (path.startsWith("/")) {
 			resourceUrl = ClassLoader.getSystemResource(u.getPath().substring(1));
 		}
 		else {
-			Class<?> caller = null;
-			try {
-				caller = Class.forName(new Throwable().getStackTrace()[0].getClassName());
-				resourceUrl = caller.getResource(path);
-			}
-			catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
+			Class<?> caller = swallow(() -> Class.forName(new Throwable().getStackTrace()[0].getClassName()));
+			resourceUrl = swallow(() -> caller.getResource(path));
 		}
 		return resourceUrl != null ? resourceUrl.openConnection() : null;
 	}
