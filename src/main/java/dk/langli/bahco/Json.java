@@ -2,6 +2,7 @@ package dk.langli.bahco;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Writer;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,14 @@ public class Json {
 	
 	public static String stringify(Object o, JsonbConfig config) {
 		return mapper(config).toJson(o);
+	}
+	
+	public static void toJson(Object o, Writer w) {
+		mapper().toJson(o, w);
+	}
+	
+	public static void toJson(Object o, JsonbConfig config, Writer w) {
+		mapper(config).toJson(o, w);
 	}
 	
 	public static JsonbConfig pretty() {

@@ -32,6 +32,7 @@
 		<org.apache.commons.commons-text.version>1.11.0</org.apache.commons.commons-text.version>
 		<jakarta.json.bind.jakarta.json.bind-api.version>3.0.0</jakarta.json.bind.jakarta.json.bind-api.version>
 		<org.eclipse.yasson.version>3.0.3</org.eclipse.yasson.version>
+		<javax.cache.cache-api.version>1.0.0</javax.cache.cache-api.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -174,6 +175,11 @@
 			<version>${org.glassfish.web.javax.el.version}</version>
 		</dependency>
 		<!-- END VALIDATION -->
+		<dependency>
+			<groupId>javax.cache</groupId>
+			<artifactId>cache-api</artifactId>
+			<version>${javax.cache.cache-api.version}</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
