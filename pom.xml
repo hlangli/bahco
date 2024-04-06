@@ -13,12 +13,12 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.target>17</maven.compiler.target>
 		<maven.compiler.source>17</maven.compiler.source>
-		<org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>0.65</org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>
+		<org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>0.74</org.jacoco.jacoco-maven-plugin.BUNDLE.LINE.COVEREDRATIO>
 		<!-- DEPENDENCIES -->
 		<ch.qos.logback.logback.version>1.5.3</ch.qos.logback.logback.version>
 		<com.fasterxml.jackson.version>2.17.0</com.fasterxml.jackson.version>
 		<com.github.freva.ascii-table.version>1.8.0</com.github.freva.ascii-table.version>
-		<commons-io.commons-io.version>2.15.1</commons-io.commons-io.version>
+		<commons-io.commons-io.version>2.16.0</commons-io.commons-io.version>
 		<javax.el.javax.el-api.version>3.0.1-b06</javax.el.javax.el-api.version>
 		<javax.validation.validation-api.version>2.0.1.Final</javax.validation.validation-api.version>
 		<org.apache.commons.commons-lang3.version>3.14.0</org.apache.commons.commons-lang3.version>
@@ -30,9 +30,13 @@
 		<org.slf4j.slf4j-api.version>2.1.0-alpha1</org.slf4j.slf4j-api.version>
 		<org.projectlombok.lombok.version>1.18.32</org.projectlombok.lombok.version>
 		<org.apache.commons.commons-text.version>1.11.0</org.apache.commons.commons-text.version>
-		<jakarta.json.bind.jakarta.json.bind-api.version>3.0.0</jakarta.json.bind.jakarta.json.bind-api.version>
+		<jakarta.json.bind.jakarta.json.bind-api.version>3.0.1</jakarta.json.bind.jakarta.json.bind-api.version>
 		<org.eclipse.yasson.version>3.0.3</org.eclipse.yasson.version>
 		<javax.cache.cache-api.version>1.0.0</javax.cache.cache-api.version>
+		<org.junit.jupiter.junit-jupiter-api.version>5.10.2</org.junit.jupiter.junit-jupiter-api.version>
+		<org.junit.jupiter.junit-jupiter-params.version>5.10.2</org.junit.jupiter.junit-jupiter-params.version>
+		<org.junit.jupiter.junit-jupiter-engine.version>5.10.2</org.junit.jupiter.junit-jupiter-engine.version>
+		<org.apache.maven.plugins.maven-surefire-plugin.version>3.0.0-M7</org.apache.maven.plugins.maven-surefire-plugin.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -105,21 +109,18 @@
 			<artifactId>commons-text</artifactId>
 			<version>${org.apache.commons.commons-text.version}</version>
 		</dependency>
-      <dependency>
-        <groupId>org.junit.jupiter</groupId>
-        <artifactId>junit-jupiter</artifactId>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
+    <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
+        <version>${org.junit.jupiter.junit-jupiter-api.version}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
+    </dependency>
+    <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
+        <version>${org.junit.jupiter.junit-jupiter-params.version}</version>
         <scope>test</scope>
-      </dependency>
+    </dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
@@ -216,6 +217,18 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.jupiter</groupId>
+						<artifactId>junit-jupiter-engine</artifactId>
+						<version>${org.junit.jupiter.junit-jupiter-engine.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>

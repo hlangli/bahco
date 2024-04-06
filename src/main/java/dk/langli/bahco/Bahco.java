@@ -123,7 +123,7 @@ public class Bahco {
 	// -- COLLECTIONS ---------------------------------------------------------
 
 	@SafeVarargs
-	public static <E> List<E> list(E... es) {
+	public static <E> ArrayList<E> list(E... es) {
 		return new ArrayList<>(Arrays.asList(es));
 	}
 
@@ -150,21 +150,20 @@ public class Bahco {
 	
 	// -- STRINGS -------------------------------------------------------------
 
+	public static String s(String format, Map<String, ? extends Object> variables) {
+		return subst(format, variables);
+	}
+
+	public static String subst(String format, Map<String, ? extends Object> variables) {
+		return StringSubstitutor.replace(format, variables);
+	}
+
 	public static String s(String format, Object... args) {
 		return subst(format, args);
 	}
 
 	public static String subst(String format, Object... args) {
 		return String.format(format, args);
-	}
-
-
-	public static String s(String format, Map<String, Object> variables) {
-		return subst(format, variables);
-	}
-
-	public static String subst(String format, Map<String, Object> variables) {
-		return StringSubstitutor.replace(format, variables);
 	}
 
 	public static String getResourceAsString(String classpath) {

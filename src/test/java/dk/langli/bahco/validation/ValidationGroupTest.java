@@ -12,6 +12,7 @@ import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 
 import org.assertj.core.api.Assertions;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -49,7 +50,7 @@ public class ValidationGroupTest {
 				.map(ConstraintViolation::getPropertyPath)
 				.map(Path::toString)
 				.collect(Collectors.toList());
-		Assertions.assertThat(violatedFields).asList().containsExactlyElementsOf(expectedViolatedFields);
+		Assertions.assertThat(violatedFields).asInstanceOf(InstanceOfAssertFactories.LIST).containsExactlyElementsOf(expectedViolatedFields);
 	}
 	
 	private static Stream<Arguments> testVectors() {
