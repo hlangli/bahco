@@ -56,6 +56,10 @@ public class CompositeBinaryKeyTest {
 				new CompositeBinaryKey.KeyDef("control", 0, 9999)
 
 		);
+		{
+			// Only for coverage
+			CompositeBinaryKey.builder().toString();
+		}
 		CompositeBinaryKey key = CompositeBinaryKey.builder()
 				.keyDefs(keyDefs)
 				.build();

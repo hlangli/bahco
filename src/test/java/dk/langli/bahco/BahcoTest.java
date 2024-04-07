@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -165,6 +166,18 @@ public class BahcoTest {
 		assertEquals(6, m.size());
 		assertEquals(0, m.get(null));
 		assertEquals(5, m.get("four"));
+	}
+	
+	@Test
+	public void testNvl() {
+		assertEquals(1, nvl(1, 2));
+		assertEquals(2, nvl(null, 2));
+		AtomicInteger i = new AtomicInteger(1);
+		assertEquals(1, nvl(i.get(), i.getAndSet(2)));
+		assertEquals(2, i.get());
+		assertEquals(2, nvl(i.get(), () -> i.getAndSet(1)));
+		assertEquals(2, nvl(null, () -> i.getAndSet(3)));
+		assertEquals(3, i.get());
 	}
 	
 	@Test

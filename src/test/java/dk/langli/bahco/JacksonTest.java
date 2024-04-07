@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 public class JacksonTest {
 	@Test
 	public void testInstantiation() {
-		assertNotNull(new Json());
+		assertNotNull(new Jackson());
 	}
 
 	@Test

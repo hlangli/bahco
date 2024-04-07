@@ -23,6 +23,7 @@ public class Json {
 	    return mapper(DEFAULT_CONFIG);
 	}
 	
+	@SuppressWarnings("resource")
 	private static Jsonb mapper(JsonbConfig config) {
 		return objectMapper.get().computeIfAbsent(config, c -> JsonbBuilder.create(config));
 	}

@@ -3,6 +3,7 @@ package dk.langli.bahco;
 import static dk.langli.bahco.Bahco.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -24,6 +25,23 @@ public class JsonTest {
 		);
 		assertEquals("{\"key\":\"Swedish\"}", Json.stringify(m));
 		assertEquals("{\n    \"key\": \"Swedish\"\n}", Json.stringify(m, Json.pretty()));
+	}
+
+	@Test
+	public void testToJson() {
+		Map<String, Object> m = map(
+				entry("key", "Swedish")
+		);
+		{
+			StringWriter sw = new StringWriter();
+			Json.toJson(m, sw);
+			assertEquals("{\"key\":\"Swedish\"}", sw.toString());
+		}
+		{
+			StringWriter sw = new StringWriter();
+			Json.toJson(m, Json.pretty(), sw);
+			assertEquals("{\n    \"key\": \"Swedish\"\n}", sw.toString());
+		}
 	}
 
 	@Test
