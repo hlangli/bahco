@@ -1,5 +1,6 @@
 package dk.langli.bahco;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -229,7 +231,7 @@ public class Bahco {
 		return flatten(null, h);
 	}
 
-	public static Map<String, Object> flatten(List<?> h) {
+	public static Map<String, Object> flatten(Collection<?> h) {
 		return flatten(null, h);
 	}
 
@@ -244,7 +246,7 @@ public class Bahco {
 			}
 		} else if (o instanceof Collection) {
 			@SuppressWarnings("unchecked")
-			List<Object> c = (List<Object>) o;
+			List<Object> c = new ArrayList<>((Collection<Object>) o);
 			for (int i = 0; i < c.size(); i++) {
 				String fqk = key != null ? subst("%s[%s]", key, i) : subst("[%s]", i);
 				map.putAll(flatten(fqk, c.get(i)));
@@ -253,6 +255,54 @@ public class Bahco {
 			map.put(key != null ? key : "null", o);
 		}
 		return map;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static Collection<Object> simplify(Collection<?> o, String... packagePrefixes) {
+		return (Collection<Object>) simplifyObject(o, packagePrefixes);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> simplify(Map<String, Object> o, String... packagePrefixes) {
+		return (Map<String, Object>) simplifyObject(o, packagePrefixes);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Object simplifyObject(Object o, String... packagePrefixes) {
+		if(o == null) return null;
+		else if(o instanceof Map) {
+			return ((Map<String, Object>) o).entrySet().stream()
+					.collect(Collectors.toMap(Entry::getKey, e -> simplifyObject(e.getValue(), packagePrefixes)));
+		}
+		else if(o instanceof Collection) {
+			return ((List<Object>) o).stream()
+					.map(e -> simplifyObject(e, packagePrefixes))
+					.collect(Collectors.toList());
+		}
+		else {
+			if(list(packagePrefixes).stream()
+					.map(prefix -> o.getClass().getPackageName().startsWith(prefix))
+					.filter(ctx -> ctx == true)
+					.findAny()
+					.orElse(false)) {
+				return list(o.getClass().getDeclaredMethods()).stream()
+						.filter(m -> m.getParameterCount() == 0)
+						.filter(m -> m.getName().startsWith("get"))
+						.filter(m -> m.canAccess(o))
+						.collect(toNvlMap(m -> fieldName(m), m -> simplifyObject(invokeGet(m, o), packagePrefixes)));
+			}
+			else {
+				return o;
+			}
+		}
+	}
+	
+	private static String fieldName(Method getMethod) {
+		return StringUtils.uncapitalize(getMethod.getName().substring(3));
+	}
+	
+	private static Object invokeGet(Method m, Object o) {
+		return wrap(() -> m.invoke(o, (Object[]) null));
 	}
 
 	// -- NUMBERS -------------------------------------------------------------

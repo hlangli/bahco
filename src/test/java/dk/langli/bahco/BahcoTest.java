@@ -192,12 +192,35 @@ public class BahcoTest {
 								))
 						))
 				)),
-				entry(null, 4)
+				entry(null, 4),
+				entry("subjects", list(
+						Subject.builder()
+						.name("x")
+						.children(
+								list(
+										Subject.builder().name("y").build()
+								)
+						)
+						.relatives(
+								map(
+										entry("z", Subject.builder()
+												.name("æ")
+												.children(
+														list(
+																Subject.builder().name("ø").build()
+														)
+												)
+												.build()
+										)
+								)
+						)
+						.build()
+				))
 		);
 		
 		//When
-		Map<String, Object> flattenedMap = flatten(map);
-		Map<String, Object> flattenedList = flatten(list);
+		Map<String, Object> flattenedMap = flatten(simplify(map, "dk.langli.bahco"));
+		Map<String, Object> flattenedList = flatten(simplify(list, "dk.langli.bahco"));
 		
 		//Then
 		assertEquals(1, (int) flattenedList.get("[0]"));
@@ -208,7 +231,7 @@ public class BahcoTest {
 		assertEquals(3, (int) flattenedMap.get("energy.barry.BarryUtilTest.a[2]"));
 		assertEquals(4, (int) flattenedMap.get("null"));
 	}
-
+	
 	@Test
 	public void testBd() {
 		assertEquals(1.5, bd(1.5).doubleValue());
