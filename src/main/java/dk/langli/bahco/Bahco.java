@@ -279,21 +279,19 @@ public class Bahco {
 					.map(e -> simplifyObject(e, packagePrefixes))
 					.collect(Collectors.toList());
 		}
+		else if(list(packagePrefixes).stream()
+				.map(prefix -> o.getClass().getPackageName().startsWith(prefix))
+				.filter(ctx -> ctx == true)
+				.findAny()
+				.orElse(false)) {
+			return list(o.getClass().getDeclaredMethods()).stream()
+					.filter(m -> m.getParameterCount() == 0)
+					.filter(m -> m.getName().startsWith("get"))
+					.filter(m -> m.canAccess(o))
+					.collect(toNvlMap(m -> fieldName(m), m -> simplifyObject(invokeGet(m, o), packagePrefixes)));
+		}
 		else {
-			if(list(packagePrefixes).stream()
-					.map(prefix -> o.getClass().getPackageName().startsWith(prefix))
-					.filter(ctx -> ctx == true)
-					.findAny()
-					.orElse(false)) {
-				return list(o.getClass().getDeclaredMethods()).stream()
-						.filter(m -> m.getParameterCount() == 0)
-						.filter(m -> m.getName().startsWith("get"))
-						.filter(m -> m.canAccess(o))
-						.collect(toNvlMap(m -> fieldName(m), m -> simplifyObject(invokeGet(m, o), packagePrefixes)));
-			}
-			else {
-				return o;
-			}
+			return o instanceof Number ? o : o.toString();
 		}
 	}
 	
