@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
-  <Appenders>
-    <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-    </Console>
-  </Appenders>
-  <Loggers>
-    <Root level="INFO">
-      <AppenderRef ref="Console"/>
-    </Root>
-  </Loggers>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%style{%d{yyyy-MM-dd HH:mm:ss} }{white}%highlight{%level}{FATAL=bright red, ERROR=bright red, WARN=bright yellow, INFO=bright green, DEBUG=cyan, TRACE=yellow}%style{ [}{white}%style{%tid}{bright,magenta}%style{] %c{1}:}{white}%style{%L}{bright,blue}%style{: }{white}%m%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="dk.langli.bahco.Bahco" additivity="false" level="fatal">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Logger name="dk.langli" additivity="false" level="trace">
+			<AppenderRef ref="console" />
+		</Logger>
+		<Root level="warn">
+			<AppenderRef ref="console" />
+		</Root>
+	</Loggers>
 </Configuration>
 
