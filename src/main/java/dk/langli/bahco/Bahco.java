@@ -195,11 +195,15 @@ public class Bahco {
 	}
 
 	public static <K, V> Map<K, V> map(List<Map<K, V>> maps) {
+		return map(maps, () -> new HashMap<>());
+	}
+
+	public static <K, V> Map<K, V> map(List<Map<K, V>> maps, Supplier<Map<K, V>> mapSupplier) {
 		return maps.stream()
 				.filter(map -> map != null)
 				.map(Map::entrySet)
 				.flatMap(Set::stream)
-				.collect(toNvlMap(Entry::getKey, Entry::getValue, (a, b) -> b));
+				.collect(toNvlMap(Entry::getKey, Entry::getValue, (a, b) -> b, mapSupplier));
 	}
 
 	public static <T> T nvl(T obj, Supplier<T> nvl) {
@@ -215,8 +219,12 @@ public class Bahco {
 	}
 
 	public static <T, K, U> Collector<T, ?, Map<K, U>> toNvlMap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends U> valueMapper, BinaryOperator<U> mergeFunction) {
+		return toNvlMap(keyMapper, valueMapper, (a, b) -> b, () -> new HashMap<>());
+	}
+
+	public static <T, K, U> Collector<T, ?, Map<K, U>> toNvlMap(Function<? super T, ? extends K> keyMapper, Function<? super T, ? extends U> valueMapper, BinaryOperator<U> mergeFunction, Supplier<Map<K, U>> mapSupplier) {
 		return Collectors.collectingAndThen(Collectors.toList(), list -> {
-			Map<K, U> result = new HashMap<>();
+			Map<K, U> result = mapSupplier.get();
 			for(T item : list) {
 				K key = keyMapper.apply(item);
 				U newValue = valueMapper.apply(item);
